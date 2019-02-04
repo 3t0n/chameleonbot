@@ -1,9 +1,12 @@
 import postgresql
 import config
 
+from apscheduler.schedulers.background import BackgroundScheduler
+
 connection_string = config.CONNECTION_STRING
 
-def get_test():
+
+def test():
     with postgresql.open(connection_string) as db:
         test = 'успешно'
         query = 'SELECT 1'
@@ -18,7 +21,8 @@ def get_test():
 
         return message
 
-def get_checks():
+
+def checks():
     with postgresql.open(connection_string) as db:
         checks = ''
         query = '''
@@ -62,7 +66,8 @@ def get_checks():
 
         return message
 
-def get_sales():
+
+def sales():
     with postgresql.open(connection_string) as db:
         query = '''
         SELECT 
@@ -80,3 +85,14 @@ def get_sales():
         print(message)
 
         return message
+
+
+def subscribe():
+
+
+    return 'Subscribed'
+
+
+def unsubscribe():
+
+    return 'Unsibscribed'
