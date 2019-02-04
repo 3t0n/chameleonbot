@@ -9,7 +9,6 @@ subscribers = []
 scheduler = BackgroundScheduler()
 bot = telebot.TeleBot(config.TOKEN)
 
-
 def scheduler_handler():
     sales = parser.sales()
     for s in subscribers:
@@ -19,6 +18,8 @@ def scheduler_handler():
 @bot.message_handler(commands=['start', 'go'])
 def start_handler(message):
     bot.send_message(message.chat.id, 'Чем могу помочь?')
+    if message.contact:
+        bot.send_message(message.chat.id, message.contact.phone_number)
 
 
 @bot.message_handler(commands=['sales'])
@@ -61,9 +62,25 @@ def unsubscribe_handler(message):
     bot.send_message(message.chat.id, unsubscribe)
 
 
+@bot.message_handler(commands=['phone'])
+def phone_handler(message):
+    keyboard = telebot.types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True, one_time_keyboard=True)
+    reg_button = telebot.types.KeyboardButton(text="Share your phone number", request_contact=True)
+    keyboard.add(reg_button)
+    bot.send_message(message.chat.id, "You should share your phone number", reply_markup=keyboard)
+
+    # markup = telebot.types.ReplyKeyboardRemove(selective=False)
+    # bot.send_message(message.chat.id, message, reply_markup=markup)
+
+
+@bot.message_handler(content_types=['contact'])
+def contact_handler(message):
+    print(message.contact.phone_number)
+
+
 scheduler.add_job(scheduler_handler, 'cron', hour=20, minute=15, second=0)
 #scheduler.add_job(scheduler_handler, 'cron', second=0)
 scheduler.start()
 
-bot.polling()
+bot.polling(none_stop=True)
 scheduler.shutdown()
