@@ -82,5 +82,5 @@ scheduler.add_job(scheduler_handler, 'cron', hour=20, minute=15, second=0)
 #scheduler.add_job(scheduler_handler, 'cron', second=0)
 scheduler.start()
 
-bot.polling(none_stop=True)
+bot.polling()
 scheduler.shutdown()
