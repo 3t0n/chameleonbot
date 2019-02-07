@@ -4,7 +4,7 @@ import config
 from apscheduler.schedulers.background import BackgroundScheduler
 
 connection_string = config.CONNECTION_STRING
-
+white_list = config.IDS
 
 def test():
     with postgresql.open(connection_string) as db:
@@ -87,12 +87,30 @@ def sales():
         return message
 
 
-def subscribe():
+def average():
+    with postgresql.open(connection_string) as db:
+        query = '''
+        SELECT 
+            avg(sum_check/100)::numeric(10,2) 
+        FROM sales.checks 
+        WHERE type_payment in (1,2) AND time_check > current_date'''
+
+        try:
+            result = db.query(query)
+            average = int(result[0][0])
+        except:
+            average = 0
+
+        message = 'Средний чек за сегодня: {} грн'.format(average)
+        print(message)
+
+        return message
 
 
-    return 'Subscribed'
+def security(user_id):
+    result = True
+    if white_list.count(user_id) == 0:
+        print("User {} unregistered".format(user_id))
+        result = False
 
-
-def unsubscribe():
-
-    return 'Unsibscribed'
+    return result
