@@ -12,8 +12,8 @@ def test():
         query = 'SELECT 1'
         try:
             result = db.query(query)
-        except:
-            print('Error: get_test()')
+        except Exception as e:
+            print('test(): {}'.format(e))
             test = 'отсутствует'
 
         message = 'Подключение к базе данных {}'.format(test)
@@ -55,8 +55,8 @@ def checks():
                 for element in line:
                     checks += ' ' + str(element)
                 checks += '\n'
-        except:
-            print('Error: get_checks()')
+        except Exception as e:
+            print('checks(): {}'.format(e))
 
         if not checks.strip():
             checks = 'Нет товаров'
@@ -78,7 +78,8 @@ def sales():
         try:
             result = db.query(query)
             sales = int(result[0][0])
-        except:
+        except Exception as e:
+            print('sales(): {}'.format(e))
             sales = 0
 
         message = 'Выручка за сегодня: {} грн'.format(sales)
@@ -98,7 +99,8 @@ def average():
         try:
             result = db.query(query)
             average = int(result[0][0])
-        except:
+        except Exception as e:
+            print('average(): {}'.format(e))
             average = 0
 
         message = 'Средний чек за сегодня: {} грн'.format(average)

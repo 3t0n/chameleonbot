@@ -8,7 +8,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 start = time.time()
 subscribers = []
 scheduler = BackgroundScheduler()
-bot = telebot.TeleBot(config.TOKEN)
+bot = telebot.TeleBot(config.TOKEN, threaded=False)
 
 
 def scheduler_handler():
@@ -91,9 +91,19 @@ def id_handler(message):
 #     print(message.contact.phone_number)
 
 
+def bot_polling():
+    while True:
+        try:
+            bot.polling(timeout=60)
+        except Exception as e:
+            print('Polling exeption: {}'.format(e))
+            bot.stop_polling()
+            time.sleep(60)
+
+
 scheduler.add_job(scheduler_handler, 'cron', hour=20, minute=15, second=0)
 scheduler.start()
 
 
-bot.polling()
+bot_polling()
 scheduler.shutdown()
