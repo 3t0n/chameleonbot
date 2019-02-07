@@ -33,9 +33,9 @@ def sales_handler(message):
 
 
 @bot.message_handler(commands=['average'])
-def sales_handler(message):
+def average_handler(message):
     if parser.security(message.from_user.id):
-        average = parser.checks()
+        average = parser.average()
         bot.send_message(message.chat.id, average)
 
 
@@ -68,7 +68,7 @@ def unsubscribe_handler(message):
         else:
             unsubscribe = 'Already unsubscribed'
 
-    bot.send_message(message.chat.id, unsubscribe)
+        bot.send_message(message.chat.id, unsubscribe)
 
 
 @bot.message_handler(commands=['id'])
