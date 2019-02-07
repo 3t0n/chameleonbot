@@ -18,6 +18,19 @@ def scheduler_handler():
         bot.send_message(s, sales + '\n' + average)
 
 
+@bot.message_handler(commands=['id'])
+def id_handler(message):
+    bot.send_message(message.chat.id, message.from_user.id)
+
+
+@bot.message_handler(commands=['test'])
+def test_handler(message):
+    if parser.security(message.from_user.id):
+        test = parser.test()
+        execution = '\nExecution ' + str(time.time() - start) + ' seconds'
+        bot.send_message(message.chat.id, test + execution)
+
+
 @bot.message_handler(commands=['sales'])
 def sales_handler(message):
     if parser.security(message.from_user.id):
@@ -26,7 +39,7 @@ def sales_handler(message):
 
 
 @bot.message_handler(commands=['checks'])
-def sales_handler(message):
+def checks_handler(message):
     if parser.security(message.from_user.id):
         checks = parser.checks()
         bot.send_message(message.chat.id, checks)
@@ -37,14 +50,6 @@ def average_handler(message):
     if parser.security(message.from_user.id):
         average = parser.average()
         bot.send_message(message.chat.id, average)
-
-
-@bot.message_handler(commands=['test'])
-def sales_handler(message):
-    if parser.security(message.from_user.id):
-        test = parser.test()
-        execution = '\nExecution ' + str(time.time() - start) + ' seconds'
-        bot.send_message(message.chat.id, test + execution)
 
 
 @bot.message_handler(commands=['subscribe'])
@@ -70,10 +75,6 @@ def unsubscribe_handler(message):
 
         bot.send_message(message.chat.id, unsubscribe)
 
-
-@bot.message_handler(commands=['id'])
-def id_handler(message):
-    bot.send_message(message.chat.id, message.from_user.id)
 
 # @bot.message_handler(commands=['phone'])
 # def phone_handler(message):
