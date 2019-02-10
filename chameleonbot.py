@@ -52,6 +52,13 @@ def average_handler(message):
         bot.send_message(message.chat.id, average)
 
 
+@bot.message_handler(commands=['find'])
+def find_handler(message):
+    if parser.security(message.from_user.id):
+        goods = message.text.replace('/find ', '')
+        find = parser.find(goods)
+        bot.send_message(message.chat.id, find)
+
 @bot.message_handler(commands=['subscribe'])
 def subscribe_handler(message):
     if parser.security(message.from_user.id):

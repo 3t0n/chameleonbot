@@ -109,6 +109,43 @@ def average():
         return message
 
 
+def find(name):
+    with postgresql.open(connection_string) as db:
+        find = ''
+        query = '''
+        SELECT
+            id_goods, 
+            name_goods,
+            (SELECT (price_new/100.0)::numeric(12,2) FROM spring.doc_reprice_table where id_goods = goods.id_goods 
+                ORDER BY date_doc DESC LIMIT 1) as price, 
+            'грн за 1',
+            (SELECT name_unit FROM front.unit WHERE is_default = true AND id_goods = goods.id_goods) as unit
+        FROM front.goods
+        WHERE name_goods ILIKE '%{}%' 
+        ORDER BY id_goods
+        LIMIT 10'''.format(name)
+
+        print(query)
+
+        try:
+            result = db.query(query)
+
+            for line in result:
+                for element in line:
+                    find += ' ' + str(element)
+                find += '\n'
+        except Exception as e:
+            print('find(): {}'.format(e))
+
+        if not find.strip():
+            find = 'Нет товаров'
+
+        message = 'Найдено первых 10 товаров:\n{}'.format(find)
+        print(message)
+
+        return message
+
+
 def security(user_id):
     result = True
     if white_list.count(user_id) == 0:
